@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"nku-treehole-server/db"
+	"time"
+)
 
 type Session struct {
 	ID        int       `gorm:"column:id" json:"id" form:"id"`
@@ -10,6 +13,13 @@ type Session struct {
 	CreatedAt time.Time `gorm:"column:created_at" json:"created_at" form:"created_at"`
 }
 
-func (c *Session) Session() string {
+func (s *Session) TableName() string {
 	return "sessions"
+}
+
+func (s *Session) CreateSession(userId int64, token string, expiredTime time.Time) error {
+	conn := db.GetDBConn()
+	obj := &Session{UserId: userId, Token: token, ExpiredAt: expiredTime}
+	err := conn.Table(s.TableName()).Create(obj).Error
+	return err
 }

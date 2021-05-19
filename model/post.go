@@ -11,6 +11,6 @@ type Post struct {
 	DeletedAt *time.Time `gorm:"column:deleted_at" json:"deleted_at" form:"deleted_at"`
 }
 
-func (c *Post) Post() string {
+func (c *Post) TableName() string {
 	return "posts"
 }

@@ -11,6 +11,6 @@ type Comment struct {
 	DeletedAt *time.Time `gorm:"column:deleted_at" json:"deleted_at" form:"deleted_at"`
 }
 
-func (c *Comment) Comment() string {
+func (c *Comment) TableName() string {
 	return "comments"
 }
