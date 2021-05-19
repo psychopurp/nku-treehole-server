@@ -1,0 +1,10 @@
+
+debug: true                  # 是否是debug模式
+addr: :9090                  # HTTP绑定端口
+name: nku-treehole-api              # API Server的名字
+
+db:  # DB 配置
+  name: nku_treehole
+  addr: 127.0.0.1:3306
+  username: root
+  password: nk_treehole

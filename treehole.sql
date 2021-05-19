@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS `nku_treehole`;
+USE `nku_treehole`;
 DROP TABLE IF EXISTS `comments`,`posts`,`sessions`,`users`;
 CREATE TABLE `comments`  (
   `id` int NOT NULL AUTO_INCREMENT,
