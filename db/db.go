@@ -5,6 +5,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"nku-treehole-server/config"
+	"nku-treehole-server/pkg/logger"
 )
 
 var (
@@ -20,10 +21,10 @@ type DBConfig struct {
 
 func InitDB() {
 	dbConf := &DBConfig{
-		UserName: fmt.Sprint(config.Conf.Get("db.username")),
-		Password: fmt.Sprint(config.Conf.Get("db.password")),
-		Addr:     fmt.Sprint(config.Conf.Get("db.addr")),
-		Name:     fmt.Sprint(config.Conf.Get("db.name")),
+		UserName: config.Conf.GetString("db.username"),
+		Password: config.Conf.GetString("db.password"),
+		Addr:     config.Conf.GetString("db.addr"),
+		Name:     config.Conf.GetString("db.name"),
 	}
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbConf.UserName, dbConf.Password, dbConf.Addr, dbConf.Name)
@@ -32,7 +33,7 @@ func InitDB() {
 		panic(err)
 	}
 	db = _db
-	fmt.Println("success")
+	logger.Infof("DB Connect success")
 }
 
 func GetDBConn() *gorm.DB {

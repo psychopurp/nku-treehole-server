@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"nku-treehole-server/config"
 	"nku-treehole-server/db"
+	"nku-treehole-server/pkg/logger"
 )
 
 func main() {
@@ -18,11 +19,15 @@ func main() {
 		r.POST("/api/logout", empty)
 		r.POST("/api/register", empty)
 
-		r.POST("/api/post/create", empty)
+		r.POST("/api/post/send", empty)
 		r.GET("/api/post/search", empty)
 		r.POST("/api/post/comment", empty)
-
 	}
+	if !config.Conf.GetBool("debug") {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	logger.Fatalf("%v", r.Run(config.Conf.GetString("addr")))
 }
 
 func empty(ctx *gin.Context) {
