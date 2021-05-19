@@ -4,7 +4,7 @@ import "testing"
 
 func TestName(t *testing.T) {
 
-	printf(DEBUG, "test %s", "hello")
+	printf(debug, "test %s", "hello")
 
 	Debugf("hello")
 	Infof("hello")

@@ -28,7 +28,7 @@ const (
 	debug LogLevel = 0
 	info  LogLevel = 1
 	warn  LogLevel = 2
-	error LogLevel = 3
+	err   LogLevel = 3
 	fatal LogLevel = 4
 )
 
@@ -47,7 +47,7 @@ func logLevelString(level LogLevel) (levelStr string, levelColor string) {
 		return "INFO ", blue
 	case warn:
 		return "WARN ", yellow
-	case error:
+	case err:
 		return "ERROR", red
 	case fatal:
 		return "FATAL", magenta
@@ -80,7 +80,7 @@ func Warnf(format string, args ...interface{}) {
 }
 
 func Errorf(format string, args ...interface{}) {
-	printf(error, format, args...)
+	printf(err, format, args...)
 }
 
 func Fatalf(format string, args ...interface{}) {

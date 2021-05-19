@@ -3,6 +3,7 @@ module nku-treehole-server
 go 1.16
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/gin-gonic/gin v1.7.1
 	github.com/inconshreveable/log15 v0.0.0-20201112154412-8562bdadbbac

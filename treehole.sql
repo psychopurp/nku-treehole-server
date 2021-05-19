@@ -30,7 +30,8 @@ CREATE TABLE `sessions`  (
   `expired_at` datetime NOT NULL COMMENT '过期时间',
   `created_at` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
-  INDEX `idx_token`(`token`) USING BTREE
+  INDEX `idx_token`(`token`) USING BTREE,
+  INDEX `idx_user_token` (`user_id`) USING BTREE
 );
 
 CREATE TABLE `users`  (

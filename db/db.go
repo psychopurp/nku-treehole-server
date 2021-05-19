@@ -37,5 +37,8 @@ func InitDB() {
 }
 
 func GetDBConn() *gorm.DB {
+	if config.Conf.GetBool("debug") {
+		return db.Debug()
+	}
 	return db
 }
