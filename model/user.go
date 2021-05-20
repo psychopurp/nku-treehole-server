@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"nku-treehole-server/db"
+	"time"
+)
 
 type User struct {
 	ID        int64      `gorm:"column:id" json:"id" form:"id"`
@@ -19,4 +22,17 @@ type User struct {
 
 func (u *User) TableName() string {
 	return "users"
+}
+
+func (u *User) CreateUser(user *User) error {
+	conn := db.GetDBConn()
+	err := conn.Table(u.TableName()).Create(user).Error
+	return err
+}
+
+func (u *User) SearchUserByID(uid int64) (*User, error) {
+	conn := db.GetDBConn()
+	res := &User{}
+	err := conn.Table(u.TableName()).Where("id=?", uid).First(res).Error
+	return res, err
 }
