@@ -39,7 +39,7 @@ CREATE TABLE `users`  (
   `level` int(8) ZEROFILL NOT NULL COMMENT '用户权限等级 0--普通用户 1--普通管理员',
   `name` varchar(32) NULL COMMENT '姓名',
   `sex` int NULL COMMENT '性别',
-  `birth` date NULL COMMENT '生日',
+  `birthday` date NULL COMMENT '生日',
   `email` varchar(50) NOT NULL COMMENT '邮箱',
   `avatar` varchar(255) NULL COMMENT '头像',
   `phone` varchar(32) NOT NULL COMMENT '注册手机号码',
