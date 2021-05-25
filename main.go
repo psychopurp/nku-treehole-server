@@ -26,10 +26,9 @@ func main() {
 	if !config.Conf.GetBool("debug") {
 		gin.SetMode(gin.ReleaseMode)
 	}
-
 	logger.Fatalf("%v", r.Run(config.Conf.GetString("addr")))
 }
 
 func empty(ctx *gin.Context) {
-
+	ctx.JSON(200,gin.H{"name ":"jack"})
 }
