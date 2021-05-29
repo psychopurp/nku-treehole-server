@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"nku-treehole-server/config"
 	"nku-treehole-server/db"
+	"nku-treehole-server/handler"
 	"nku-treehole-server/middleware"
 	"nku-treehole-server/pkg/logger"
 )
@@ -13,15 +14,16 @@ func main() {
 	config.Init("./conf", true)
 	db.InitDB()
 	r := gin.Default()
+	api := r.Group("/api")
 	{
 		// 注册接口
-		r.POST("/api/login", empty)
-		r.POST("/api/logout", middleware.CheckLogin(), empty)
-		r.POST("/api/register", empty)
+		api.POST("/user/login", handler.Login)
+		api.POST("/user/register", handler.Register)
+		api.POST("/logout", middleware.CheckLogin(), empty)
 
-		r.POST("/api/post/send", middleware.CheckLogin(), empty)
-		r.GET("/api/post/search", empty)
-		r.POST("/api/post/comment", middleware.CheckLogin(), empty)
+		api.POST("/post/send", middleware.CheckLogin(), empty)
+		api.GET("/post/search", handler.Login)
+		api.POST("/post/comment", middleware.CheckLogin(), empty)
 	}
 	if !config.Conf.GetBool("debug") {
 		gin.SetMode(gin.ReleaseMode)
@@ -30,5 +32,5 @@ func main() {
 }
 
 func empty(ctx *gin.Context) {
-	ctx.JSON(200,gin.H{"name ":"jack"})
+	ctx.JSON(200, gin.H{"name ": "jack"})
 }

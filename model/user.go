@@ -10,7 +10,7 @@ type User struct {
 	Level     int32      `gorm:"column:level" json:"level" form:"level"`
 	Name      string     `gorm:"column:name" json:"name" form:"name"`
 	Sex       int32      `gorm:"column:sex" json:"sex" form:"sex"`
-	Birthday  *time.Time `gorm:"column:birth" json:"birth" form:"birth"`
+	Birthday  *time.Time `gorm:"column:birthday" json:"birth" form:"birthday"`
 	Email     string     `gorm:"column:email" json:"email" form:"email"`
 	Avatar    string     `gorm:"column:avatar" json:"avatar" form:"avatar"`
 	Phone     string     `gorm:"column:phone" json:"phone" form:"phone"`
@@ -34,5 +34,12 @@ func (u *User) SearchUserByID(uid int64) (*User, error) {
 	conn := db.GetDBConn()
 	res := &User{}
 	err := conn.Table(u.TableName()).Where("id=?", uid).First(res).Error
+	return res, err
+}
+
+func (u *User) SearchUserByEmail(email string) (*User, error) {
+	conn := db.GetDBConn()
+	res := &User{}
+	err := conn.Table(u.TableName()).Where("email=?", email).First(res).Error
 	return res, err
 }
