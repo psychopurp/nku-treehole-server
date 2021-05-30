@@ -18,9 +18,9 @@ func (s *Session) TableName() string {
 	return "sessions"
 }
 
-func (s *Session) CreateSession(userId int64, token string, expiredTime time.Time) error {
+func (s *Session) CreateSession(userId int64, token string, expireTime time.Time) error {
 	conn := db.GetDBConn()
-	obj := &Session{UserId: userId, Token: token, ExpiredAt: expiredTime}
+	obj := &Session{UserId: userId, Token: token, ExpiredAt: expireTime}
 	err := conn.Table(s.TableName()).Create(obj).Error
 	return err
 }
@@ -35,5 +35,18 @@ func (s *Session) GetSessionByUid(userId int64) (*Session, error) {
 func (s *Session) DeleteOldSession(userId int64) error {
 	conn := db.GetDBConn()
 	err := conn.Table(s.TableName()).Where("user_id=? and deleted_at is null", userId).Update("deleted_at", time.Now()).Error
+	return err
+}
+
+func (s *Session) GetSessionByToken(token string) (*Session, error) {
+	conn := db.GetDBConn()
+	res := &Session{}
+	err := conn.Table(s.TableName()).Where("token=? and deleted_at is null", token).First(res).Error
+	return res, err
+}
+
+func (s *Session) Refresh(token string, expireTime time.Time) error {
+	conn := db.GetDBConn()
+	err := conn.Table(s.TableName()).Where("token=? and deleted_at is null", token).Update("expired_at", expireTime).Error
 	return err
 }

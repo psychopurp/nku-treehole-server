@@ -21,8 +21,8 @@ func main() {
 		api.POST("/user/register", handler.Register)
 		api.POST("/logout", middleware.CheckLogin(), empty)
 
-		api.POST("/post/send", middleware.CheckLogin(), empty)
-		api.GET("/post/search", handler.Login)
+		api.POST("/post/createPost", middleware.CheckLogin(), empty)
+		api.GET("/post/getPosts", handler.Login)
 		api.POST("/post/comment", middleware.CheckLogin(), empty)
 	}
 	if !config.Conf.GetBool("debug") {

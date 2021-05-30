@@ -59,12 +59,10 @@ func logLevelString(level LogLevel) (levelStr string, levelColor string) {
 func printf(level LogLevel, format string, args ...interface{}) {
 	levelStr, color := logLevelString(level)
 	prefix := fmt.Sprintf("%s %s %s |", color, levelStr, reset)
+	_ = l.Output(3, fmt.Sprintf("%s %s ", prefix, fmt.Sprintf(format, args...)))
 	if level == fatal {
-		l.Fatalf("%s %s ", prefix, fmt.Sprintf(format, args...))
-	} else {
-		l.Printf("%s %s ", prefix, fmt.Sprintf(format, args...))
+		os.Exit(1)
 	}
-
 }
 
 func Debugf(format string, args ...interface{}) {
