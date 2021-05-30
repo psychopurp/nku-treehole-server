@@ -3,14 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-)
-
-const (
-	// 请求成功状态码
-	SUCCESS_CODE int = 200
-
-	// 登录过期，或者未登录
-	LOGIN_EXPIRE int = 400
+	"nku-treehole-server/config"
 )
 
 type Response struct {
@@ -21,7 +14,7 @@ type Response struct {
 
 func SuccessResponse(c *gin.Context, data interface{}) {
 	c.JSON(http.StatusOK, Response{
-		Code: SUCCESS_CODE,
+		Code: config.SUCCESS_CODE,
 		Msg:  "",
 		Data: data,
 	})

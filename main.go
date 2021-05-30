@@ -21,7 +21,7 @@ func main() {
 		api.POST("/user/register", handler.Register)
 		api.POST("/logout", middleware.CheckLogin(), empty)
 
-		api.POST("/post/createPost", middleware.CheckLogin(), empty)
+		api.POST("/post/createPost", middleware.CheckLogin(), handler.CreatePost)
 		api.GET("/post/getPosts", handler.Login)
 		api.POST("/post/comment", middleware.CheckLogin(), empty)
 	}

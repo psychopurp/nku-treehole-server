@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"nku-treehole-server/db"
+	"time"
+)
 
 type Post struct {
 	ID        int        `gorm:"column:id" json:"id" form:"id"`
@@ -13,4 +16,10 @@ type Post struct {
 
 func (c *Post) TableName() string {
 	return "posts"
+}
+
+func (c *Post) CreatePost(post *Post) error {
+	conn := db.GetDBConn()
+	err := conn.Table(c.TableName()).Create(post).Error
+	return err
 }
