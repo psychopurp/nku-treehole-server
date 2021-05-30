@@ -25,3 +25,11 @@ func TestUser_SearchUserByID(t *testing.T) {
 	u, err := u.SearchUserByID(uid)
 	t.Log(u, err)
 }
+
+func TestUser_FindInBatches(t *testing.T) {
+	setup()
+	uid := int64(1398604583239946240)
+	u := &User{}
+	users, err := u.FindInBatches([]int64{uid})
+	t.Log(users, err)
+}

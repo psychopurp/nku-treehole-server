@@ -23,3 +23,16 @@ func (c *Post) CreatePost(post *Post) error {
 	err := conn.Table(c.TableName()).Create(post).Error
 	return err
 }
+
+func (c *Post) GetPosts(page, limit int) (posts []*Post, total int64, err error) {
+	conn := db.GetDBConn()
+	err = conn.Table(c.TableName()).
+		Where("deleted_at is null").
+		Count(&total).
+		Order("created_at DESC").
+		Limit(limit).
+		Offset(page * limit).
+		Find(&posts).
+		Error
+	return posts, total, err
+}

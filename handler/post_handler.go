@@ -3,15 +3,13 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"nku-treehole-server/config"
+	"nku-treehole-server/dto"
 	"nku-treehole-server/model"
+	"nku-treehole-server/service"
 )
 
-type CreatePostRequest struct {
-	Content string `json:"content"`
-}
-
 func CreatePost(c *gin.Context) {
-	var reqParam CreatePostRequest
+	var reqParam dto.CreatePostRequest
 	if err := c.ShouldBindJSON(&reqParam); err != nil {
 		ErrorResponse(c, "参数错误")
 		return
@@ -36,4 +34,19 @@ func CreatePost(c *gin.Context) {
 		return
 	}
 	SuccessResponse(c, map[string]interface{}{})
+}
+
+func GetPosts(c *gin.Context) {
+	var reqParam dto.PageQuery
+	if err := c.ShouldBindQuery(&reqParam); err != nil {
+		ErrorResponse(c, "参数错误")
+		return
+	}
+	postService := &service.PostService{}
+	res, err := postService.GetPosts(reqParam.Page, reqParam.Limit)
+	if err != nil {
+		ErrorResponse(c, "查询失败")
+		return
+	}
+	SuccessResponse(c, res)
 }

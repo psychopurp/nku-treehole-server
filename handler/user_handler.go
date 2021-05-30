@@ -13,19 +13,8 @@ import (
 	"strings"
 )
 
-type LoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-type RegisterRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Username string `json:"username"`
-}
-
 func Login(c *gin.Context) {
-	var reqParam LoginRequest
+	var reqParam dto.LoginRequest
 	if err := c.ShouldBindJSON(&reqParam); err != nil {
 		ErrorResponse(c, "参数错误")
 		return
@@ -55,7 +44,7 @@ func Login(c *gin.Context) {
 }
 
 func Register(c *gin.Context) {
-	var reqParam RegisterRequest
+	var reqParam dto.RegisterRequest
 	if err := c.ShouldBindJSON(&reqParam); err != nil {
 		ErrorResponse(c, "参数错误")
 		return

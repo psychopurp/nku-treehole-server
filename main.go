@@ -22,7 +22,7 @@ func main() {
 		api.POST("/logout", middleware.CheckLogin(), empty)
 
 		api.POST("/post/createPost", middleware.CheckLogin(), handler.CreatePost)
-		api.GET("/post/getPosts", handler.Login)
+		api.GET("/post/getPosts", middleware.CheckLogin(), handler.GetPosts)
 		api.POST("/post/comment", middleware.CheckLogin(), empty)
 	}
 	if !config.Conf.GetBool("debug") {

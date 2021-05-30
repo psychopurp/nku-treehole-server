@@ -37,6 +37,13 @@ func (u *User) SearchUserByID(uid int64) (*User, error) {
 	return res, err
 }
 
+func (u *User) FindInBatches(userIds []int64) ([]*User, error) {
+	conn := db.GetDBConn()
+	var res []*User
+	err := conn.Table(u.TableName()).Where("id in ?", userIds).First(&res).Error
+	return res, err
+}
+
 func (u *User) SearchUserByEmail(email string) (*User, error) {
 	conn := db.GetDBConn()
 	res := &User{}
