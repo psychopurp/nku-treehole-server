@@ -38,7 +38,7 @@ func CreatePost(c *gin.Context) {
 
 func GetPosts(c *gin.Context) {
 	var reqParam dto.PageQuery
-	if err := c.ShouldBindQuery(&reqParam); err != nil {
+	if err := c.ShouldBindQuery(&reqParam); err != nil || (reqParam.Limit == 0 && reqParam.Page == 0) {
 		ErrorResponse(c, "参数错误")
 		return
 	}
