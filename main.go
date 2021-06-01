@@ -7,11 +7,18 @@ import (
 	"nku-treehole-server/handler"
 	"nku-treehole-server/middleware"
 	"nku-treehole-server/pkg/logger"
+	"os"
 )
 
 func main() {
+	isDev := true
+	if os.Getenv("DOCKER") == "true" {
+		isDev = false
+		logger.Infof("Server running on product env")
+	}
+
 	//必须先初始化配置文件
-	config.Init("./conf", true)
+	config.Init("./conf", isDev)
 	db.InitDB()
 	r := gin.Default()
 	api := r.Group("/api")
@@ -28,9 +35,10 @@ func main() {
 	if !config.Conf.GetBool("debug") {
 		gin.SetMode(gin.ReleaseMode)
 	}
+	r.NoRoute(empty)
 	logger.Fatalf("%v", r.Run(config.Conf.GetString("addr")))
 }
 
 func empty(ctx *gin.Context) {
-	ctx.JSON(200, gin.H{"name ": "jack"})
+	ctx.String(200, "nku-treehole-server")
 }

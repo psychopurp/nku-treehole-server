@@ -26,7 +26,6 @@ func InitDB() {
 		Addr:     config.Conf.GetString("db.addr"),
 		Name:     config.Conf.GetString("db.name"),
 	}
-
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbConf.UserName, dbConf.Password, dbConf.Addr, dbConf.Name)
 	_db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {

@@ -14,9 +14,9 @@ func Init(cfgDir string, isDev bool) {
 	Conf = viper.New()
 	Conf.AddConfigPath(cfgDir)
 	if isDev {
-		Conf.SetConfigName("Config.dev")
+		Conf.SetConfigName("config.dev")
 	} else {
-		Conf.SetConfigName("Config.product")
+		Conf.SetConfigName("config.product")
 	}
 	Conf.SetConfigType("yml")
 	if err := Conf.ReadInConfig(); err != nil {
