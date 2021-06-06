@@ -59,6 +59,5 @@ func (s *PostService) GetPosts(page, limit int) (*dto.GetPostsResponse, error) {
 			})
 		}
 	}
-	res.Total = (int(totalCount) + limit - 1) / limit
 	return res, nil
 }
