@@ -40,7 +40,7 @@ func (u *User) SearchUserByID(uid int64) (*User, error) {
 func (u *User) FindInBatches(userIds []int64) ([]*User, error) {
 	conn := db.GetDBConn()
 	var res []*User
-	err := conn.Table(u.TableName()).Where("id in ?", userIds).First(&res).Error
+	err := conn.Table(u.TableName()).Where("id in ?", userIds).Find(&res).Error
 	return res, err
 }
 

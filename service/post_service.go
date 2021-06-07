@@ -29,23 +29,27 @@ func (s *PostService) GetPosts(page, limit int) (*dto.GetPostsResponse, error) {
 		return res, err
 	}
 	var userIds []int64
+	userIdMap := make(map[int64]*model.User)
 	for _, i := range posts {
-		userIds = append(userIds, i.UserId)
+		if _, ok := userIdMap[i.UserId]; !ok {
+			userIds = append(userIds, i.UserId)
+			userIdMap[i.UserId] = nil
+		}
 	}
+
 	user := &model.User{}
 	users, err := user.FindInBatches(userIds)
 	if err != nil {
 		logger.Errorf("GetPosts err=%v ", err)
 		return nil, err
 	}
-	userMap := map[int64]*model.User{}
 	for _, u := range users {
-		userMap[u.ID] = u
+		userIdMap[u.ID] = u
 	}
 
 	for _, i := range posts {
 		// 用户不存在则跳过
-		if u, exist := userMap[i.UserId]; !exist {
+		if u, exist := userIdMap[i.UserId]; !exist || u == nil {
 			totalCount--
 			continue
 		} else {
