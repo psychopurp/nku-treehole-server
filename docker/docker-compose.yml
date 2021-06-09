@@ -37,6 +37,8 @@ services:
       - app
     depends_on:
       - mysql
+    environment:
+      - TZ=Asia/Shanghai
     command:
       - /bin/bash
       - -c
