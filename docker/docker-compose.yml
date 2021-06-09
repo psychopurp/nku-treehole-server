@@ -17,6 +17,7 @@ services:
       MYSQL_ROOT_PASSWORD: nk_treehole # root用户的密码
       MYSQL_USER: treehole # 创建新用户
       MYSQL_PASSWORD: treehole # 新用户的密码
+      TZ: Asia/Shanghai
     ports:
       - 3306:3306
     networks:

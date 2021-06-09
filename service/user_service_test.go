@@ -8,7 +8,7 @@ import (
 )
 
 func setup() {
-	config.Init("../conf", false)
+	config.Init("../conf", true)
 	db.InitDB()
 }
 
