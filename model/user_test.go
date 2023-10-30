@@ -1,15 +1,14 @@
 package model
 
 import (
-	"nku-treehole-server/config"
-	"nku-treehole-server/db"
 	"testing"
+
+	"nku-treehole-server/config"
 )
 
-// 运行测试前得初始化环境
+// Initialize the environment before running the test
 func setup() {
-	config.Init("../conf", true)
-	db.InitDB()
+	config.Setup("../../.env.example")
 }
 
 func TestUser_CreateUser(t *testing.T) {

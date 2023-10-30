@@ -4,12 +4,12 @@ import "time"
 
 const (
 	UID string = "UID"
-	// 登陆过期时效 三天
+	// Login expiration duration: three days
 	EXPIRE_DURATION time.Duration = 3 * 24 * 60 * time.Minute
 
-	// 请求成功状态码
+	// Success status code
 	SUCCESS_CODE int = 200
 
-	// 登录过期，或者未登录
+	// Login expired or not logged in
 	LOGIN_EXPIRE int = 400
 )

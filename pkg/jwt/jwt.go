@@ -1,37 +1,75 @@
 package jwt
 
 import (
-	jwt2 "github.com/dgrijalva/jwt-go"
+	"fmt"
+	"nku-treehole-server/config"
+	"time"
+
+	"github.com/golang-jwt/jwt"
 )
 
-var jwt2Secret = []byte("nku-treehole")
+var jwtHelper *jwtCryptoHelper
 
-type Claims struct {
+// Contract fot JWT Crypto Helper
+type JWTCryptoHelper interface {
+	GenerateToken(UserId string) (string, error)
+	ValidateToken(tokenString string) (string, error)
+}
+
+// Struct for jwt custom claim
+type jwtCustomClaim struct {
 	UserID string `json:"user_id"`
-	jwt2.StandardClaims
+	jwt.StandardClaims
 }
 
-// 产生token的函数
-func GenerateToken(userID string) (string, error) {
-	claims := Claims{
-		userID,
-		jwt2.StandardClaims{Issuer: "nku-treehole"},
+// Struct for JWTHelper
+type jwtCryptoHelper struct{}
+
+// Func to initialize new jwt crypto helper
+func GetJWTCrypto() JWTCryptoHelper {
+	if jwtHelper == nil {
+		jwtHelper = &jwtCryptoHelper{}
 	}
-	tokenClaims := jwt2.NewWithClaims(jwt2.SigningMethodHS256, claims)
-	token, err := tokenClaims.SignedString(jwt2Secret)
-	return token, err
+	return jwtHelper
 }
 
-// 验证token的函数
-func ParseToken(token string) (*Claims, error) {
-	tokenClaims, err := jwt2.ParseWithClaims(token, &Claims{}, func(token *jwt2.Token) (interface{}, error) {
-		return jwt2Secret, nil
-	})
+// Func to Generate Token with User ID as main issuer
+func (helper *jwtCryptoHelper) GenerateToken(UserID string) (string, error) {
+	serverConfiguration := config.GetConfig().Server
+	claims := &jwtCustomClaim{
+		UserID,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().Local().Add(time.Hour * time.Duration(serverConfiguration.ExpiresHour)).Unix(),
+			Issuer:    serverConfiguration.Name,
+			IssuedAt:  time.Now().Unix(),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	t, err := token.SignedString([]byte(serverConfiguration.Secret))
+	if err != nil {
+		return err.Error(), err
+	}
+	return t, nil
+}
 
-	if tokenClaims != nil {
-		if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
-			return claims, nil
+// Func to validate token
+func (helper *jwtCryptoHelper) ValidateToken(tokenString string) (string, error) {
+	claims := &jwtCustomClaim{}
+
+	serverConfiguration := config.GetConfig().Server
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("there was an error")
 		}
+		return []byte(serverConfiguration.Secret), nil
+	})
+	if err != nil {
+		return "", err
 	}
-	return nil, err
+
+	if !token.Valid {
+		return "", fmt.Errorf("token not valid")
+	}
+
+	return claims.UserID, nil
 }

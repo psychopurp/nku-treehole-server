@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+
 	"nku-treehole-server/config"
 	"nku-treehole-server/dto"
 	"nku-treehole-server/model"
@@ -11,7 +12,7 @@ import (
 func CreatePost(c *gin.Context) {
 	var reqParam dto.CreatePostRequest
 	if err := c.ShouldBindJSON(&reqParam); err != nil {
-		ErrorResponse(c, "参数错误")
+		ErrorResponse(c, "Parameter error")
 		return
 	}
 	var exist bool
@@ -21,7 +22,7 @@ func CreatePost(c *gin.Context) {
 		uid, exist = userId.(int64)
 	}
 	if !exist {
-		ErrorResponse(c, "发送失败，请重新登陆")
+		ErrorResponse(c, "Failed to send, please log in again")
 		return
 	}
 
@@ -30,7 +31,7 @@ func CreatePost(c *gin.Context) {
 	post.Content = reqParam.Content
 	err := post.CreatePost(post)
 	if err != nil {
-		ErrorResponse(c, "发送失败，请重新登陆")
+		ErrorResponse(c, "Failed to send, please log in again")
 		return
 	}
 	SuccessResponse(c, map[string]interface{}{})
@@ -39,13 +40,13 @@ func CreatePost(c *gin.Context) {
 func GetPosts(c *gin.Context) {
 	var reqParam dto.PageQuery
 	if err := c.ShouldBindQuery(&reqParam); err != nil || (reqParam.Limit == 0 && reqParam.Page == 0) {
-		ErrorResponse(c, "参数错误")
+		ErrorResponse(c, "Parameter error")
 		return
 	}
 	postService := &service.PostService{}
 	res, err := postService.GetPosts(reqParam.Page, reqParam.Limit)
 	if err != nil {
-		ErrorResponse(c, "查询失败")
+		ErrorResponse(c, "Query failed")
 		return
 	}
 	SuccessResponse(c, res)

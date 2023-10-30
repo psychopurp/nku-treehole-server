@@ -19,34 +19,34 @@ func (s *Session) TableName() string {
 }
 
 func (s *Session) CreateSession(userId int64, token string, expireTime time.Time) error {
-	conn := db.GetDBConn()
+	conn := db.GetDB()
 	obj := &Session{UserId: userId, Token: token, ExpiredAt: expireTime}
 	err := conn.Table(s.TableName()).Create(obj).Error
 	return err
 }
 
 func (s *Session) GetSessionByUid(userId int64) (*Session, error) {
-	conn := db.GetDBConn()
+	conn := db.GetDB()
 	res := &Session{}
 	err := conn.Table(s.TableName()).Where("user_id=? and deleted_at is null", userId).First(res).Error
 	return res, err
 }
 
 func (s *Session) DeleteOldSession(userId int64) error {
-	conn := db.GetDBConn()
+	conn := db.GetDB()
 	err := conn.Table(s.TableName()).Where("user_id=? and deleted_at is null", userId).Update("deleted_at", time.Now()).Error
 	return err
 }
 
 func (s *Session) GetSessionByToken(token string) (*Session, error) {
-	conn := db.GetDBConn()
+	conn := db.GetDB()
 	res := &Session{}
 	err := conn.Table(s.TableName()).Where("token=? and deleted_at is null", token).First(res).Error
 	return res, err
 }
 
 func (s *Session) Refresh(token string, expireTime time.Time) error {
-	conn := db.GetDBConn()
+	conn := db.GetDB()
 	err := conn.Table(s.TableName()).Where("token=? and deleted_at is null", token).Update("expired_at", expireTime).Error
 	return err
 }

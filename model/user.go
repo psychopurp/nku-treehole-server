@@ -1,8 +1,9 @@
 package model
 
 import (
-	"nku-treehole-server/db"
 	"time"
+
+	"nku-treehole-server/db"
 )
 
 type User struct {
@@ -25,27 +26,27 @@ func (u *User) TableName() string {
 }
 
 func (u *User) CreateUser(user *User) error {
-	conn := db.GetDBConn()
+	conn := db.GetDB()
 	err := conn.Table(u.TableName()).Create(user).Error
 	return err
 }
 
 func (u *User) SearchUserByID(uid int64) (*User, error) {
-	conn := db.GetDBConn()
+	conn := db.GetDB()
 	res := &User{}
 	err := conn.Table(u.TableName()).Where("id=?", uid).First(res).Error
 	return res, err
 }
 
 func (u *User) FindInBatches(userIds []int64) ([]*User, error) {
-	conn := db.GetDBConn()
+	conn := db.GetDB()
 	var res []*User
 	err := conn.Table(u.TableName()).Where("id in ?", userIds).Find(&res).Error
 	return res, err
 }
 
 func (u *User) SearchUserByEmail(email string) (*User, error) {
-	conn := db.GetDBConn()
+	conn := db.GetDB()
 	res := &User{}
 	err := conn.Table(u.TableName()).Where("email=?", email).First(res).Error
 	return res, err

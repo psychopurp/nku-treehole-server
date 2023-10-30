@@ -2,13 +2,13 @@ package service
 
 import (
 	"fmt"
+
 	"nku-treehole-server/dto"
 	"nku-treehole-server/model"
 	"nku-treehole-server/pkg/logger"
 )
 
-type PostService struct {
-}
+type PostService struct{}
 
 func (s *PostService) GetPosts(page, limit int) (*dto.GetPostsResponse, error) {
 	post := &model.Post{}

@@ -1,15 +1,14 @@
 package service
 
 import (
-	"nku-treehole-server/config"
-	"nku-treehole-server/db"
-	"nku-treehole-server/model"
 	"testing"
+
+	"nku-treehole-server/config"
+	"nku-treehole-server/model"
 )
 
 func setup() {
-	config.Init("../conf", true)
-	db.InitDB()
+	config.Setup("../../.env.example")
 }
 
 func TestUserService_AddSession(t *testing.T) {

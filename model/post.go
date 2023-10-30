@@ -19,13 +19,13 @@ func (c *Post) TableName() string {
 }
 
 func (c *Post) CreatePost(post *Post) error {
-	conn := db.GetDBConn()
+	conn := db.GetDB()
 	err := conn.Table(c.TableName()).Create(post).Error
 	return err
 }
 
 func (c *Post) GetPosts(page, limit int) (posts []*Post, total int64, err error) {
-	conn := db.GetDBConn()
+	conn := db.GetDB()
 	err = conn.Table(c.TableName()).
 		Where("deleted_at is null").
 		Count(&total).

@@ -1,26 +1,24 @@
 # NKU-Treehole-Server
 
-Backend for NKU's treehole.
+Backend for nku-treehole(Secret-Sharing App).
 
-## 运行
+## Run
 
-### 1.配置数据库 mysql
-
-docker 配置 mysql (或者本地启动一个 mysql)
+### 1.Start Database
 
 ```bash
 cd docker
 docker-compose up -d
 ```
 
-## 2.建表
+## 2.Initialize Tables
 
-> 在数据库里运行 treehole.sql
+> Execute treehole.sql in MySQL
 
-## 3.配置文件
+## 3.Config file
 
 /conf/config.dev.yml
 
-4.启动
+4.Start
 
 > go run .

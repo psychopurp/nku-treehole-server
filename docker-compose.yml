@@ -1,0 +1,60 @@
+version: "3.9"
+services:
+  db:
+    container_name: nku-treehole-db
+    restart: on-failure
+    image: mysql:8
+    command: --default-authentication-plugin=caching_sha2_password --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    environment:
+      - MYSQL_DATABASE=${DATABASE_NAME}
+      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
+    ports:
+      - ${EXPOSE_DB_PORT}:3306
+    volumes:
+      - ./data/db:/var/lib/mysql
+    networks:
+      - default
+
+  caddy:
+    container_name: nku-treehole-caddy
+    image: caddy:2
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - api
+    networks:
+      - default
+
+  api:
+    container_name: nku-treehole-api
+    tty: true
+    build: .
+    ports:
+      - 8080:8080
+    restart: on-failure
+    volumes:
+      - ./data/api:/usr/src/app/
+    depends_on:
+      - db
+    networks:
+      - default
+
+  migration:
+    image: migrate/migrate
+    volumes:
+      - ./migrations:/migrations
+    command:
+      - -path=/migrations
+      - -database=mysql://root:${DATABASE_PASSWORD}@tcp(db)/${DATABASE_NAME}
+      - "up"
+      - "2"
+    depends_on:
+      - db
+    links:
+      - db
+
+networks:
+  default:
